@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astronomy10 Exam 2 Review: Homework + Class Problems Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+      margin: 0;
+      padding: 24px;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; }
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 4px 18px rgba(0,0,0,.08);
+      margin-bottom: 20px;
+    }
+    h1, h2, h3 { margin-top: 0; }
+    .btn {
+      background: #4f46e5; color: white; border: 0; border-radius: 12px;
+      padding: 12px 18px; cursor: pointer; font-size: 16px; margin-right: 8px; margin-top: 8px;
+    }
+    .btn.secondary { background: #e5e7eb; color: #111827; }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+    .option {
+      border: 1px solid #d1d5db; border-radius: 14px; padding: 14px; margin: 10px 0; background: #fff;
+      display: block;
+    }
+    .question {
+      white-space: pre-wrap; line-height: 1.5;
+      border: 1px solid #d1d5db; border-radius: 14px; padding: 16px; background: #f9fafb;
+    }
+    .meta { color: #4b5563; margin-bottom: 14px; }
+    input[type="text"] {
+      width: 100%; max-width: 560px; font-size: 16px; padding: 12px; border-radius: 10px; border: 1px solid #cbd5e1;
+      margin-top: 12px;
+    }
+    .hidden { display: none; }
+    .good { color: #166534; }
+    .bad { color: #991b1b; }
+    .exp { margin-top: 14px; padding: 14px; background: #f8fafc; border-left: 4px solid #4f46e5; }
+    .topbar { display:flex; justify-content:space-between; gap:20px; align-items:flex-start; flex-wrap:wrap; }
+    .small { font-size: 14px; color: #6b7280; }
+    .section { display:inline-block; padding: 6px 10px; border-radius: 999px; background:#eef2ff; color:#4338ca; font-size: 13px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div id="launcher" class="card">
+      <h1>Astronomy10 Exam 2 Review: Homework + Class Problems Quiz</h1>
+      <p class="meta"><span id="totalCount">26</span> practice questions.</p>
+      <p class="small">This version is self-contained and opens locally in a browser.</p>
+      <button class="btn" onclick="startQuiz()">Open Quiz</button>
+    </div>
+
+    <div id="quiz" class="hidden">
+      <div class="card">
+        <div class="topbar">
+          <div>
+            <h2>Astronomy10 Exam 2 Review: Homework + Class Problems Quiz</h2>
+            <div id="progress" class="meta"></div>
+          </div>
+          <div>
+            <label class="small">Question Count</label><br>
+            <input id="countInput" type="text" value="All" style="width:120px" />
+            <button class="btn" onclick="restartQuiz()">Restart / Reshuffle</button>
+            <div class="small">Enter a number or leave as All.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div id="sectionLabel" class="section"></div>
+        <div id="styleLabel" class="meta"></div>
+        <div id="questionBox" class="question"></div>
+        <div id="optionsBox"></div>
+        <div>
+          <button class="btn secondary" id="prevBtn" onclick="prevQ()">Prev</button>
+          <button class="btn" id="nextBtn" onclick="nextQ()">Next</button>
+          <button class="btn" id="submitBtn" onclick="submitAnswer()">Submit</button>
+          <button class="btn secondary" onclick="finishQuiz()">Finish Quiz</button>
+          <button class="btn secondary" onclick="restartQuiz()">Restart</button>
+        </div>
+        <div id="feedback"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const QUESTION_BANK = [
+{
+  id: "HW6_Q1",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 1. What might cause a moon to be geologically active while its planet is not?",
+  choices: [
+    "The moon may contain more magnetic material than the planet.",
+    "The moon orbital distance from the planet and/or other moons may cause tidal stresses that can heat its interior.",
+    "The moon's rotation is tidally locked to the planet.",
+    "Heating of the moon by its planet's heat of formation."
+  ],
+  a: 1,
+  exp: "Some moons, such as Io, remain geologically active because tidal forces continually flex and heat their interiors. This tidal heating can provide energy long after the planet itself has cooled."
+},
+{
+  id: "HW6_Q2",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 2. In the past, the Moon was closer to Earth, and the differences in the heights of the ocean at high and low tides were:",
+  choices: [
+    "smaller.",
+    "the same.",
+    "larger.",
+    "tides were nonexistent in the past."
+  ],
+  a: 2,
+  exp: "Tidal forces become stronger when the Moon is closer to Earth. Because the Moon has gradually moved farther away over billions of years, ancient tides were larger than they are today."
+},
+{
+  id: "HW6_Q3",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 3. We do not expect Mercury to have an atmosphere at all because:",
+  choices: [
+    "it is small.",
+    "it has a high temperature.",
+    "it is bombarded by intense solar radiation.",
+    "all of the above."
+  ],
+  a: 3,
+  exp: "Mercury's weak gravity makes it difficult to retain gases, while its high temperatures and intense solar radiation help strip away any atmosphere. Together these effects leave Mercury with only an extremely thin exosphere."
+},
+{
+  id: "HW6_Q4",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 4. The current theory is that a planet will have a strong magnetic field if it has:",
+  choices: [
+    "slow rotation and a solid core.",
+    "fast rotation and a solid core.",
+    "fast rotation and a liquid core.",
+    "slow rotation and a liquid core."
+  ],
+  a: 2,
+  exp: "Planetary magnetic fields are generated by the dynamo effect, which requires moving electrically conducting liquid. Rapid rotation helps organize these flows, producing a stronger magnetic field."
+},
+{
+  id: "HW6_Q5",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 5. The currently thin atmosphere of Mars is likely due to its:",
+  choices: [
+    "lack of volcanic activity.",
+    "extreme temperature variations.",
+    "weak gravitational field.",
+    "all of the above."
+  ],
+  a: 3,
+  exp: "Mars has weak gravity, limited recent volcanic outgassing, and large temperature variations that all contribute to its thin atmosphere. In addition, the loss of its global magnetic field allowed the solar wind to remove atmospheric gases."
+},
+{
+  id: "HW6_Q6",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 6. Which of the giant planets was predicted to exist mathematically before it was ever seen through a telescope?",
+  choices: [
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Jupiter"
+  ],
+  a: 2,
+  exp: "Neptune's existence was predicted from small irregularities in Uranus's orbit. Astronomers then pointed telescopes to the predicted location and discovered the planet."
+},
+{
+  id: "HW6_Q7",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 7. Particles that make up the rings of Uranus and Neptune are composed of:",
+  choices: [
+    "organic material that has darkened because of bombardment by cosmic rays.",
+    "rocky material from tidally disrupted moons.",
+    "all of the above.",
+    "icy material from tidally disrupted comets."
+  ],
+  a: 0,
+  exp: "The rings of Uranus and Neptune are unusually dark because radiation has altered their organic-rich material over long periods. Their composition differs noticeably from Saturn's bright icy rings."
+},
+{
+  id: "HW6_Q8",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 8. The fact that Earth's interior is differentiated suggests that:",
+  choices: [
+    "it was liquid at some point in the past.",
+    "only the crust is solid; the rest of Earth's interior is liquid.",
+    "it has both a liquid and solid core.",
+    "it formed first from denser material and then afterward accreted lighter material."
+  ],
+  a: 0,
+  exp: "Differentiation occurs when a body becomes hot enough for materials to separate by density. Dense metals sink toward the center while lighter rocks rise toward the surface."
+},
+{
+  id: "HW6_Q9",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 9. Eris and Ceres are examples of:",
+  choices: [
+    "asteroids.",
+    "meteor showers.",
+    "dwarf planets.",
+    "comets."
+  ],
+  a: 2,
+  exp: "Both Eris and Ceres satisfy the definition of dwarf planets because they orbit the Sun and are nearly spherical but have not cleared their orbital neighborhoods. Ceres is located in the asteroid belt, while Eris is beyond Neptune."
+},
+{
+  id: "HW6_Q10",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 10. Neap tide occurs when the Moon is in the first or third quarter phase and results in:",
+  choices: [
+    "no tides.",
+    "smaller than usual tides.",
+    "larger than usual tides."
+  ],
+  a: 1,
+  exp: "Neap tides occur when the Sun and Moon pull at right angles to one another. Their gravitational effects partially cancel, producing smaller differences between high and low tides."
+},
+{
+  id: "HW6_Q11",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 11. Which of the giant planets does NOT have rings?",
+  choices: [
+    "Saturn",
+    "Neptune",
+    "Uranus",
+    "All of the giant planets have rings",
+    "Jupiter"
+  ],
+  a: 3,
+  exp: "All four giant planets—Jupiter, Saturn, Uranus, and Neptune—have ring systems. Saturn's are simply the brightest and easiest to observe."
+},
+{
+  id: "HW6_Q12",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 12. The compositions of Uranus and Neptune differ primarily from those of Jupiter and Saturn in that the outer two planets contain more:",
+  choices: [
+    "hydrogen.",
+    "water ice.",
+    "carbon dioxide.",
+    "helium."
+  ],
+  a: 1,
+  exp: "Uranus and Neptune are often called ice giants because they contain much larger amounts of water, ammonia, and methane ices. Jupiter and Saturn are dominated by hydrogen and helium."
+},
+{
+  id: "HW6_Q13",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 13. Which of the following is NOT considered evidence of cataclysmic impacts in the history of our Solar System?",
+  choices: [
+    "Valles Marineris on Mars is a huge scar many times deeper than the Grand Canyon.",
+    "Mimas has a crater whose diameter is roughly one-third of the moon's size.",
+    "Uranus is tipped over so that it rotates on its side.",
+    "Mercury has crust that has buckled on the opposite side of an impact crater."
+  ],
+  a: 0,
+  exp: "Valles Marineris formed primarily through tectonic stretching rather than by an impact. The other examples are thought to be directly related to large collisions in Solar System history."
+},
+{
+  id: "HW6_Q14",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 14. Younger impact craters tend to be:",
+  choices: [
+    "found on the oldest part of a planet's surface.",
+    "superimposed on top of older craters.",
+    "larger than older craters.",
+    "smaller than older craters."
+  ],
+  a: 1,
+  exp: "A younger crater must form after the surface it strikes already exists. Therefore it is commonly seen overlapping or cutting across older craters."
+},
+{
+  id: "HW6_Q15",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 15. The gas giants are composed primarily of:",
+  choices: [
+    "hydrogen.",
+    "helium.",
+    "ammonia.",
+    "water."
+  ],
+  a: 0,
+  exp: "Jupiter and Saturn are made mostly of hydrogen, with helium as the second most abundant element. Their compositions are similar to that of the Sun because they formed from the same primordial nebula."
+},
+
+{
+  id: "HW6_Q16",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 16. Plate tectonics is NOT responsible for the formation of:",
+  choices: [
+    "canyons.",
+    "ocean trenches.",
+    "volcanoes.",
+    "mountain ranges."
+  ],
+  a: 0,
+  exp: "Most canyons are carved by erosion from rivers, wind, or ice rather than by plate tectonics. Plate tectonics is responsible for mountain building, volcanic activity, and the formation of deep ocean trenches."
+},
+{
+  id: "HW6_Q17",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 17. Where does Titan's thick, nitrogen-rich atmosphere come from?",
+  choices: [
+    "frequent volcanic eruptions",
+    "cometary impacts over the age of the Solar System",
+    "photosynthesis of algae in oceans beneath its icy surface",
+    "photodissociation of methane in its atmosphere"
+  ],
+  a: 3,
+  exp: "Ultraviolet sunlight breaks apart methane molecules in Titan's atmosphere. The resulting chemical reactions produce nitrogen-rich compounds and complex organic molecules that help maintain Titan's unique atmosphere."
+},
+{
+  id: "HW6_Q18",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 18. Mars, Venus, and Earth are much less heavily cratered than Mercury and the Moon. This is explained by the fact that:",
+  choices: [
+    "Earth and Venus were shielded from impacts by the Moon, and Mars was protected by the asteroid belt.",
+    "all three have thick, protective atmospheres.",
+    "the rate of cratering in the early Solar System was strongly dependent on location.",
+    "Mars, Venus, and Earth were geologically active longer than Mercury and the Moon."
+  ],
+  a: 3,
+  exp: "Geological activity such as volcanism, tectonics, and erosion continually reshapes planetary surfaces. These processes erase many old craters, making Earth, Venus, and Mars appear much younger than Mercury and the Moon."
+},
+{
+  id: "HW6_Q19",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 19. The Moon probably formed:",
+  choices: [
+    "when the Earth's gravity captured a planetesimal.",
+    "out of a collision between Earth and a Mars-sized object.",
+    "when planetesimals collided to form a more massive object.",
+    "when the accretion disk around Earth fragmented."
+  ],
+  a: 1,
+  exp: "The leading giant-impact hypothesis proposes that a Mars-sized object struck the young Earth. Debris from the collision collected into orbit and eventually formed the Moon."
+},
+{
+  id: "HW6_Q20",
+  hw: "HW6",
+  type: "mcq",
+  q: "Question 20. According to studies of impact cratering, which of the terrestrial planets has the oldest surface?",
+  choices: [
+    "Venus",
+    "Earth",
+    "Mercury",
+    "Mars"
+  ],
+  a: 2,
+  exp: "Mercury has experienced very little resurfacing since the early Solar System. As a result, it preserves one of the oldest and most heavily cratered planetary surfaces."
+},
+
+{
+  id: "HW7_Q1",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 1. What force holds planets in their orbits?",
+  choices: [
+    "friction",
+    "gravity",
+    "electromagnetic force",
+    "air resistance"
+  ],
+  a: 1,
+  exp: "The Sun's gravity continuously pulls planets toward it while their forward motion keeps them from falling directly inward. The combination produces stable elliptical orbits."
+},
+{
+  id: "HW7_Q2",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 2. What happens to the gravitational energy of gas as it falls toward and eventually hits the accretion disk surrounding a protostar?",
+  choices: [
+    "It simply dissipates.",
+    "It is converted into light energy, giving off a flash of light upon impact.",
+    "It is converted into potential energy as the gas plows through the disk and comes out the other side.",
+    "It is converted into thermal energy, heating the disk."
+  ],
+  a: 3,
+  exp: "As gas falls inward, gravitational potential energy is converted into kinetic energy. Collisions within the disk then convert much of that energy into heat, warming the accretion disk."
+},
+{
+  id: "HW7_Q3",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 3. According to the conservation of angular momentum, if an ice skater starts spinning with her arms out wide, then slowly pulls them close to her body, this will cause her to:",
+  choices: [
+    "spin slower.",
+    "spin faster.",
+    "maintain a constant rate of spin.",
+    "fall over."
+  ],
+  a: 1,
+  exp: "Pulling the arms inward reduces the skater's moment of inertia. Because angular momentum is conserved, the rotation rate increases."
+},
+{
+  id: "HW7_Q4",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 4. What is (are) the underlying mechanism(s) responsible for forming stars and their associated planetary system?",
+  choices: [
+    "chemical reactions among elements in active interstellar gas",
+    "gravity pulling gas inward, and rotation forming a circumstellar disk",
+    "scientists are still debating on the fundamental causes of star formation",
+    "stars were formed together with the Big Bang, the greatest explosion that originated our Universe."
+  ],
+  a: 1,
+  exp: "Gravity causes an interstellar cloud to collapse while conservation of angular momentum causes the collapsing cloud to flatten into a rotating disk. Stars form in the center, and planets later grow within the surrounding disk."
+},
+{
+  id: "HW7_Q6",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 6. ________ in our atmosphere is a direct consequence of the emergence of life.",
+  choices: [
+    "Water vapor",
+    "Nitrogen",
+    "Oxygen",
+    "Carbon dioxide"
+  ],
+  a: 2,
+  exp: "Most of Earth's atmospheric oxygen was produced by photosynthetic organisms over billions of years. Without life, Earth's atmosphere would contain very little free oxygen."
+},
+{
+  id: "HW7_Q7",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 7. Why are most of the planets composed of refractory materials found in the inner solar system?",
+  choices: [
+    "All the bodies composed of refractory materials in the outer disk migrated to the inner disk.",
+    "Planetary bodies can only be formed from refractory materials.",
+    "Refractory material existed only in the inner protoplanetary disk.",
+    "The temperature of the inner protostellar accretion disk was too high for volatile components to remain solid."
+  ],
+  a: 3,
+  exp: "Near the young Sun, temperatures were high enough that volatile materials evaporated instead of condensing into solids. Only refractory materials such as rock and metal could remain solid and build terrestrial planets."
+},
+{
+  id: "HW7_Q8",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 8. Oxygen was first introduced into Earth's atmosphere by:",
+  choices: [
+    "volcanic activity.",
+    "cyanobacteria.",
+    "trees.",
+    "dinosaurs."
+  ],
+  a: 1,
+  exp: "Ancient cyanobacteria performed photosynthesis long before plants evolved. Their activity gradually increased atmospheric oxygen during the Great Oxygenation Event."
+},
+{
+  id: "HW7_Q9",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 9. Without the ozone layer, life on Earth would be in danger from increased levels of ________ radiation.",
+  choices: [
+    "infrared",
+    "X-ray",
+    "gamma ray",
+    "ultraviolet"
+  ],
+  a: 3,
+  exp: "The ozone layer absorbs most of the Sun's harmful ultraviolet radiation. Without it, much more UV radiation would reach Earth's surface and damage living organisms."
+},
+{
+  id: "HW7_Q10",
+  hw: "HW7",
+  type: "mcq",
+  q: "Question 10. Whether or not a planet is composed mostly of rock or gas is set by:",
+  choices: [
+    "all of the above",
+    "its temperature.",
+    "its mass.",
+    "the distance from the star that it orbits."
+  ],
+  a: 0,
+  exp: "A planet's composition depends on several factors, including where it forms, the temperature of the protoplanetary disk, and whether it is massive enough to retain light gases. These factors together determine whether a planet becomes rocky or gaseous."
+},
+{
+  id: "CH5_Q1",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 1. Which of the following directly indicates the presence of an interstellar wind?",
+  choices: [
+    "diffraction spikes",
+    "the protostar",
+    "the “fingers”",
+    "the jet"
+  ],
+  a: 2,
+  exp: "The finger-like structures in images of star-forming regions point toward the source of powerful stellar winds. These winds sculpt the surrounding gas and dust, producing the characteristic pillar-like appearance."
+},
+{
+  id: "CH5_Q2",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 2. Stars are formed directly from:",
+  choices: [
+    "large molecular clouds",
+    "the Kuiper Belt",
+    "many smaller stars",
+    "a few larger stars"
+  ],
+  a: 0,
+  exp: "Stars form when dense regions inside giant molecular clouds collapse under their own gravity. These clouds are composed mostly of hydrogen gas mixed with dust and are the birthplaces of nearly all stars."
+},
+{
+  id: "CH5_Q3",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 3. The redder a star is, the ________ it is.",
+  choices: [
+    "cooler",
+    "warmer",
+    "smaller",
+    "larger"
+  ],
+  a: 0,
+  exp: "According to Wien's Law, cooler objects emit most of their light at longer wavelengths. Since red light has a longer wavelength than blue light, red stars have lower surface temperatures."
+},
+{
+  id: "CH5_Q4",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 4. Fill in the blanks: As the protostar collapses, its density ______ and the temperature ______, so the brightness ______.",
+  choices: [
+    "increases; decreases; decreases",
+    "increases; increases; increases"
+  ],
+  a: 1,
+  exp: "As gravity compresses the protostar, both density and temperature increase. The hotter object radiates much more energy, so its luminosity also increases as it approaches the onset of nuclear fusion."
+},
+{
+  id: "CH5_Q5",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 5. As the rotation of a dust cloud (or a skater) speeds up, the angular momentum remains constant.",
+  choices: [
+    "True",
+    "False",
+    "Cannot tell"
+  ],
+  a: 0,
+  exp: "Angular momentum is conserved when there is little external torque acting on a system. As the cloud shrinks, it spins faster, just as a figure skater spins faster by pulling in their arms."
+},
+{
+  id: "CH5_Q6",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 6. A secondary atmosphere around a terrestrial planet is usually rich in hydrogen and helium.",
+  choices: [
+    "True",
+    "False"
+  ],
+  a: 1,
+  exp: "Hydrogen and helium usually escape from small rocky planets because of their weak gravity. Secondary atmospheres are instead produced by volcanic outgassing and comet impacts, making them rich in gases such as carbon dioxide, nitrogen, and water vapor."
+},
+{
+  id: "CH5_Q7",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 7. Only the inner solar system shows evidence of cataclysmic impacts.",
+  choices: [
+    "True",
+    "False"
+  ],
+  a: 1,
+  exp: "Impact craters are found throughout the Solar System, including on moons, dwarf planets, and giant-planet satellites. These craters record the heavy bombardment that occurred early in Solar System history."
+},
+{
+  id: "CH5_Q8",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 8. If a star shows a redshift in its spectrum, does that mean the star's color has turned red?",
+  choices: [
+    "Yes",
+    "No"
+  ],
+  a: 1,
+  exp: "A redshift means that the wavelengths of the star's light have been stretched because the star is moving away from us. The shift is usually far too small to noticeably change the star's apparent color."
+},
+{
+  id: "CH5_Q9",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 9. Imagine that a massive planet orbits a star and causes the star to wobble back and forth along our line of sight. What will the observed spectrum show?",
+  choices: [
+    "a redshift",
+    "a blueshift",
+    "alternating redshifts and blueshifts",
+    "no Doppler effect"
+  ],
+  a: 2,
+  exp: "As the star moves alternately toward and away from Earth, its spectral lines shift back and forth between shorter and longer wavelengths. This periodic Doppler shift is one of the main methods used to discover exoplanets."
+},
+{
+  id: "CH5_Q10",
+  hw: "Class Ch5",
+  type: "mcq",
+  q: "Class Question 10. The Kepler telescope discovered most of its exoplanets by:",
+  choices: [
+    "looking for the wobble in the star's motion",
+    "directly imaging the planet",
+    "looking for decreases in the brightness of stars",
+    "directly imaging protoplanetary disks"
+  ],
+  a: 2,
+  exp: "The Kepler mission used the transit method, which detects tiny dips in a star's brightness when a planet passes in front of it. The amount and timing of the dimming reveal the planet's size and orbital period."
+},
+{
+  id: "CH6_Q2",
+  hw: "Class Ch6",
+  type: "mcq",
+  q: "Class Question 2. Region A of a terrestrial world has 20 impact craters. Region B, which is the same size as Region A, has 5 impact craters. Which region is likely to be older?",
+  choices: [
+    "Region A",
+    "Region B"
+  ],
+  a: 0,
+  exp: "Older surfaces accumulate more impact craters because they have been exposed to impacts for a longer time. Young surfaces often have fewer craters because volcanism, tectonics, or erosion have resurfaced them."
+},
+{
+  id: "CH6_Q3",
+  hw: "Class Ch6",
+  type: "mcq",
+  q: "Class Question 3. Which of the following layers of Earth's interior should be the hottest?",
+  choices: [
+    "crust",
+    "inner core",
+    "mantle",
+    "outer core"
+  ],
+  a: 1,
+  exp: "Temperature increases with depth inside Earth because of leftover heat from formation, radioactive decay, and compression. The inner core lies at the greatest depth and therefore has the highest temperature."
+},
+{
+  id: "CH6_Q4",
+  hw: "Class Ch6",
+  type: "mcq",
+  q: "Class Question 4. Imagine you discover a new terrestrial planet. You determine that its core is tiny and that it rotates very slowly. You predict that its magnetic field is going to be:",
+  choices: [
+    "very strong",
+    "very weak"
+  ],
+  a: 1,
+  exp: "Planetary magnetic fields are generated by moving liquid metal inside the core. A small core and slow rotation make the dynamo effect much weaker, resulting in a weak magnetic field."
+},
+{
+  id: "CH6_Q5",
+  hw: "Class Ch6",
+  type: "mcq",
+  q: "Class Question 5. What should be true about Earth's internal heat?",
+  choices: [
+    "It is produced by the magnetic field.",
+    "It would have been greater long ago when Earth was young.",
+    "It currently is produced by differentiation."
+  ],
+  a: 1,
+  exp: "The young Earth contained much more heat from its formation and frequent impacts. Although radioactive decay still produces heat today, the total internal heat has gradually decreased over billions of years."
+},
+{
+  id: "CH6_Q6",
+  hw: "Class Ch6",
+  type: "mcq",
+  q: "Class Question 6. The tectonic plates float on top of the mantle because they:",
+  choices: [
+    "are heated by the mantle.",
+    "are less dense than the mantle."
+  ],
+  a: 1,
+  exp: "The lithospheric plates float because they are less dense than the underlying mantle material. Convection within the mantle moves these plates and drives plate tectonics."
+},
+{
+  id: "CH6_Q7",
+  hw: "Class Ch6",
+  type: "mcq",
+  q: "Class Question 7. Active volcanism has been observed on:",
+  choices: [
+    "Venus",
+    "Earth",
+    "Mars",
+    "all of the above"
+  ],
+  a: 1,
+  exp: "Earth is currently the only terrestrial planet where active volcanism has been directly observed. Mars and Venus both show evidence of past volcanism, but ongoing eruptions have not been definitively observed in the same way."
+},
+{
+  id: "CH6_Q8",
+  hw: "Class Ch6",
+  type: "mcq",
+  q: "Class Question 8. Evidence for past water on Mars includes:",
+  choices: [
+    "sedimentary rock",
+    "chemical clues",
+    "erosion features",
+    "all of the above"
+  ],
+  a: 3,
+  exp: "Multiple lines of evidence indicate that liquid water once existed on Mars. Sedimentary rocks, minerals that form in water, and ancient river channels all support this conclusion."
+},
+{
+  id: "CH8_Q1",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 1. Which of the following statements about the giant planets compared to terrestrial planets is correct?",
+  choices: [
+    "The giant planets have more mass and higher densities.",
+    "The giant planets have larger radii and weaker magnetic fields.",
+    "The giant planets have more mass, larger radii, lower densities, and stronger magnetic fields.",
+    "The giant planets and terrestrial planets have overall similar characteristics."
+  ],
+  a: 2,
+  exp: "The giant planets are much larger and more massive than the terrestrial planets, but they are composed mainly of light elements, giving them lower average densities. They also possess much stronger magnetic fields because of their conducting interiors."
+},
+{
+  id: "CH8_Q2",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 2. You discover a giant planet around another star. It is as big as Jupiter but much more dense. What does its density tell you?",
+  choices: [
+    "It has less hydrogen and helium than Jupiter.",
+    "It has a lower mass than Jupiter.",
+    "It has a higher surface temperature than Jupiter."
+  ],
+  a: 0,
+  exp: "Hydrogen and helium are relatively low-density materials. A planet with the same size as Jupiter but a higher density must contain a larger fraction of heavier elements such as rock, metals, or ices."
+},
+{
+  id: "CH8_Q3",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 3. All of the Jovian planets have light and dark bands.",
+  choices: [
+    "True",
+    "False"
+  ],
+  a: 0,
+  exp: "All four giant planets show alternating atmospheric bands, although the bands are much easier to see on Jupiter and Saturn. Infrared observations reveal weaker band structures on Uranus and Neptune."
+},
+{
+  id: "CH8_Q4",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 4. Uranus and Neptune appear bluish-green. This is because they both absorb more ______ wavelengths of sunlight.",
+  choices: [
+    "blue",
+    "red"
+  ],
+  a: 1,
+  exp: "Methane gas in the atmospheres of Uranus and Neptune absorbs red light more effectively than blue light. As a result, the reflected sunlight appears bluish-green."
+},
+{
+  id: "CH8_Q5",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 5. Weather on the giant planets is driven by:",
+  choices: [
+    "the planets' own internal energy",
+    "energy from the Sun"
+  ],
+  a: 0,
+  exp: "Unlike Earth, the giant planets generate large amounts of internal heat that powers atmospheric convection. This internal energy drives their strong winds, storms, and banded cloud patterns."
+},
+{
+  id: "CH8_Q6",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 6. The centers of the giant planets may be liquid because:",
+  choices: [
+    "the centers are mostly water.",
+    "of the high magnetic fields.",
+    "the temperature is very high."
+  ],
+  a: 2,
+  exp: "Deep inside the giant planets, temperatures and pressures become enormous. Under these extreme conditions, materials can exist as hot liquids even though the pressures are extremely high."
+},
+{
+  id: "CH8_Q7",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 7. The size of Jupiter's plasma torus is approximately the size of:",
+  choices: [
+    "Io",
+    "Jupiter",
+    "Io's orbit around Jupiter",
+    "Jupiter's orbit around the Sun"
+  ],
+  a: 2,
+  exp: "The plasma torus is a doughnut-shaped cloud of charged particles supplied by Jupiter's moon Io. It extends around Jupiter at approximately the same distance as Io's orbit."
+},
+{
+  id: "CH8_Q8",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 8. If you could measure the velocities of ring particles at different distances from Saturn, you would find:",
+  choices: [
+    "particles closer to Saturn orbit at slower speeds.",
+    "particles farther from Saturn orbit at slower speeds.",
+    "orbital speed is the same at all distances."
+  ],
+  a: 1,
+  exp: "Kepler's laws show that orbital speed decreases as distance from the planet increases. Ring particles close to Saturn complete their orbits more quickly than particles farther away."
+},
+{
+  id: "CH8_Q9",
+  hw: "Class Ch8",
+  type: "mcq",
+  q: "Class Question 9. We sometimes don't see rings around a Jovian planet. This is because:",
+  choices: [
+    "ring particles are too small to see.",
+    "rings are very thin, and we sometimes see them edge-on.",
+    "planetary rings do not last forever.",
+    "the reflected light from the rings is too dim to see."
+  ],
+  a: 1,
+  exp: "Planetary rings are extremely thin compared with their diameter. When Earth lies nearly in the plane of the rings, they appear almost edge-on and become very difficult to detect."
+},
+{
+  id: "CH9_Q1",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 1. Images of Pluto from New Horizons in 2015 show a world with regions of different composition. This tells us that Pluto likely:",
+  choices: [
+    "has been the same since the early Solar System.",
+    "has been geologically active in the past.",
+    "is slowly warming."
+  ],
+  a: 1,
+  exp: "The diverse terrains and smooth regions observed by New Horizons indicate that Pluto's surface has changed over time. This evidence suggests that Pluto has experienced recent or ongoing geological activity despite its small size and great distance from the Sun."
+},
+{
+  id: "CH9_Q2",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 2. Active features on moons in our Solar System include:",
+  choices: [
+    "volcanoes.",
+    "cryovolcanoes.",
+    "volcanoes and cryovolcanoes.",
+    "neither volcanoes nor cryovolcanoes."
+  ],
+  a: 2,
+  exp: "Some moons, such as Io, have active volcanoes that erupt molten rock. Others, including Enceladus and Triton, have cryovolcanoes that erupt water ice or other frozen materials instead of lava."
+},
+{
+  id: "CH9_Q3",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 3. Triton is unusual because:",
+  choices: [
+    "it has volcanoes.",
+    "it has cryovolcanoes.",
+    "of its thick atmosphere.",
+    "it orbits Neptune in a retrograde orbit."
+  ],
+  a: 3,
+  exp: "Triton travels around Neptune in the opposite direction of the planet's rotation. This retrograde orbit strongly suggests that Triton formed elsewhere and was later captured by Neptune's gravity."
+},
+{
+  id: "CH9_Q4",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 4. Titan is unusual because:",
+  choices: [
+    "it has volcanoes.",
+    "it has cryovolcanoes.",
+    "of its thick atmosphere.",
+    "it orbits Saturn in a retrograde orbit."
+  ],
+  a: 2,
+  exp: "Titan is the only moon in the Solar System with a dense, nitrogen-rich atmosphere. Its atmosphere supports methane clouds, rain, rivers, and lakes, making it one of the most Earth-like worlds beyond Earth."
+},
+{
+  id: "CH9_Q5",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 5. Both Ganymede and Titan are larger than Mercury. Why are they considered moons and not planets?",
+  choices: [
+    "Ganymede and Titan do not have atmospheres.",
+    "Ganymede and Titan do not have rings.",
+    "They are both dwarf planets.",
+    "Planets must orbit the Sun."
+  ],
+  a: 3,
+  exp: "The distinction between a planet and a moon depends on what the object orbits. Ganymede and Titan orbit Jupiter and Saturn, respectively, rather than orbiting the Sun directly."
+},
+{
+  id: "CH9_Q6",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 6. Asteroids typically have heavily cratered surfaces. What is true about the age of asteroids?",
+  choices: [
+    "Asteroids are young objects.",
+    "Asteroids are old objects."
+  ],
+  a: 1,
+  exp: "Heavy cratering indicates that asteroid surfaces have remained largely unchanged for billions of years. Most asteroids are leftover building blocks from the early Solar System and preserve its ancient history."
+},
+{
+  id: "CH9_Q7",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 7. You discover a comet that has an eccentric orbit highly inclined to the ecliptic. The comet likely originated in the ________ and has an orbital period that is ________ than 200 years.",
+  choices: [
+    "Kuiper Belt, less",
+    "Kuiper Belt, greater",
+    "Oort Cloud, less",
+    "Oort Cloud, greater"
+  ],
+  a: 3,
+  exp: "Long-period comets originate in the distant Oort Cloud. They typically have highly inclined, elongated orbits and require more than 200 years to complete one orbit around the Sun."
+},
+{
+  id: "CH9_Q8",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 8. Comets are called 'dirty snowballs' because:",
+  choices: [
+    "they are made of ice and various minerals.",
+    "they are made of ice and occasionally hit planetary surfaces."
+  ],
+  a: 0,
+  exp: "Comets consist mainly of water ice mixed with dust, rocky material, and organic compounds. This mixture gives them the nickname 'dirty snowballs,' distinguishing them from pure ice bodies."
+},
+{
+  id: "CH9_Q9",
+  hw: "Class Ch9",
+  type: "mcq",
+  q: "Class Question 9. We know how old the Solar System is by the age of:",
+  choices: [
+    "moons.",
+    "comets.",
+    "meteorites.",
+    "asteroids."
+  ],
+  a: 2,
+  exp: "Meteorites preserve material that formed when the Solar System was created about 4.6 billion years ago. Radiometric dating of meteorites provides one of the most accurate measurements of the Solar System's age."
+},
+
+{
+  id: "CH10_Q1",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 1. A star has a parallax of 0.01 arcseconds. How far away is it?",
+  choices: [
+    "100 parsecs",
+    "10 parsecs",
+    "0.1 parsecs",
+    "0.01 parsecs"
+  ],
+  a: 0,
+  exp: "The distance to a star in parsecs is given by d = 1/p, where p is the parallax angle in arcseconds. A parallax of 0.01 arcseconds corresponds to a distance of 100 parsecs, illustrating that smaller parallaxes indicate more distant stars."
+},
+{
+  id: "CH10_Q2",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 2. A star has luminosity L. What would its luminosity be from twice the distance away?",
+  choices: [
+    "4L",
+    "2L",
+    "L"
+  ],
+  a: 2,
+  exp: "Luminosity is an intrinsic property of a star and does not depend on the observer's distance. Only the star's apparent brightness decreases with distance according to the inverse-square law."
+},
+{
+  id: "CH10_Q3",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 3. Which of the following apparent magnitudes is the brightest?",
+  choices: [
+    "5",
+    "2",
+    "-1",
+    "-2"
+  ],
+  a: 3,
+  exp: "The astronomical magnitude scale is reversed: smaller (more negative) numbers represent brighter objects. Therefore, a magnitude of -2 is brighter than -1, 2, or 5."
+},
+{
+  id: "CH10_Q4",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 4. Each chemical element has which of the following?",
+  choices: [
+    "a set of energy levels based on hydrogen",
+    "a unique set of energy levels",
+    "different sets of energy levels for absorption and emission",
+    "random sets of energy levels"
+  ],
+  a: 1,
+  exp: "Each element has a unique arrangement of electron energy levels determined by its atomic structure. These unique energy levels produce distinctive absorption and emission lines that act as the element's spectral fingerprint."
+},
+{
+  id: "CH10_Q5",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 5. Which of the following spectral types is the coolest?",
+  choices: [
+    "O",
+    "B",
+    "A",
+    "M"
+  ],
+  a: 3,
+  exp: "The stellar spectral sequence is O, B, A, F, G, K, M from hottest to coolest. M-type stars have the lowest surface temperatures and often appear red."
+},
+{
+  id: "CH10_Q6",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 6. Which of the following spectral types has the strongest hydrogen lines?",
+  choices: [
+    "A",
+    "G",
+    "M",
+    "O"
+  ],
+  a: 0,
+  exp: "Hydrogen absorption lines are strongest in A-type stars because their surface temperatures place many hydrogen atoms in the ideal energy state for absorbing visible light. Hotter or cooler stars show weaker hydrogen lines."
+},
+{
+  id: "CH10_Q7",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 7. If two stars are in a binary system and one appears dimmer than the other, what can we infer?",
+  choices: [
+    "The apparently dimmer star is farther away than the brighter star.",
+    "The apparently dimmer star is truly dimmer than the brighter star.",
+    "We can't tell from this one observation; we must make other measurements first."
+  ],
+  a: 1,
+  exp: "The two stars in a binary system are essentially the same distance from Earth. Therefore, if one appears dimmer, it must have a lower intrinsic luminosity than its companion."
+},
+{
+  id: "CH10_Q8",
+  hw: "Class Ch10",
+  type: "mcq",
+  q: "Class Question 8. Which of the following statements about the main sequence is correct?",
+  choices: [
+    "Hotter stars are not more massive.",
+    "More massive stars are more luminous.",
+    "Hotter stars are not more luminous.",
+    "Cooler stars are more luminous."
+  ],
+  a: 1,
+  exp: "On the main sequence, a star's mass determines nearly all of its properties. More massive stars are hotter, larger, and significantly more luminous than lower-mass main-sequence stars."
+},
+
+{
+  id: "CH11_Q1",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 1. In which layer of the Sun does nuclear fusion occur?",
+  choices: [
+    "convective zone",
+    "core",
+    "corona",
+    "radiative zone"
+  ],
+  a: 1,
+  exp: "The Sun's core is the only region where temperatures and pressures are high enough for hydrogen nuclei to overcome their electrical repulsion and fuse into helium. This nuclear fusion produces nearly all of the Sun's energy."
+},
+{
+  id: "CH11_Q2",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 2. Of the three ways to transfer energy, ________ is not a significant method in the Sun.",
+  choices: [
+    "conduction",
+    "convection",
+    "radiation"
+  ],
+  a: 0,
+  exp: "The Sun is almost entirely composed of hot ionized gas rather than solid material. Because conduction is most efficient in solids, energy inside the Sun is transported mainly by radiation and convection."
+},
+{
+  id: "CH11_Q3",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 3. We can directly study what is occurring inside the Sun by using:",
+  choices: [
+    "photons and helioseismology.",
+    "photons and solar neutrinos.",
+    "solar neutrinos and helioseismology.",
+    "helioseismology, photons, and solar neutrinos."
+  ],
+  a: 2,
+  exp: "Neutrinos escape directly from the Sun's core almost immediately after they are produced, while helioseismology uses sound waves to probe the Sun's interior. Ordinary photons take hundreds of thousands of years to reach the surface, so they cannot directly reveal present-day core conditions."
+},
+{
+  id: "CH11_Q4",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 4. Spectral lines indicate the presence of elements in the:",
+  choices: [
+    "core",
+    "radiative zone",
+    "convective zone",
+    "photosphere"
+  ],
+  a: 3,
+  exp: "Most of the Sun's absorption lines form in the relatively cool photosphere where atoms absorb specific wavelengths of light. By studying these lines, astronomers determine the Sun's chemical composition."
+},
+{
+  id: "CH11_Q5",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 5. The most common element in the Sun is:",
+  choices: [
+    "hydrogen",
+    "helium",
+    "calcium",
+    "they are equally common"
+  ],
+  a: 0,
+  exp: "Hydrogen makes up roughly three-quarters of the Sun's mass and serves as the fuel for nuclear fusion. Helium is the second most abundant element because it is continually produced in the Sun's core."
+},
+{
+  id: "CH11_Q6",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 6. Rank these layers of the Sun in the correct order, from coolest to hottest.",
+  choices: [
+    "core, corona, photosphere",
+    "photosphere, core, corona",
+    "corona, photosphere, core",
+    "photosphere, corona, core"
+  ],
+  a: 3,
+  exp: "The photosphere has a temperature of about 5,800 K, while the corona reaches over one million kelvin. The core is even hotter, approaching 15 million kelvin, making it the hottest region of the Sun."
+},
+{
+  id: "CH11_Q7",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 7. Why does the historical sunspot plot only date back to about 1600?",
+  choices: [
+    "The Sun did not have sunspots before 1600.",
+    "There were previously too many sunspots to count.",
+    "Sunspots were difficult to observe before the invention of the telescope."
+  ],
+  a: 2,
+  exp: "Although a few large sunspots were recorded before telescopes existed, systematic observations became possible only after telescopes were invented around 1609. This allowed astronomers to monitor the Sun's activity consistently over centuries."
+},
+{
+  id: "CH11_Q8",
+  hw: "Class Ch11",
+  type: "mcq",
+  q: "Class Question 8. The time between peaks of solar activity is:",
+  choices: [
+    "30 days",
+    "11 years",
+    "22 years",
+    "33 years"
+  ],
+  a: 1,
+  exp: "The number of sunspots rises and falls in an approximately 11-year solar cycle. The Sun's magnetic field actually reverses every 11 years, producing a full magnetic cycle of about 22 years."
+},
+
+    ];
+
+    document.getElementById('totalCount').textContent = QUESTION_BANK.length;
+
+    let active = [];
+    let idx = 0;
+    let answers = {};
+    let score = 0;
+    let answered = new Set();
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function startQuiz() {
+      document.getElementById('launcher').classList.add('hidden');
+      document.getElementById('quiz').classList.remove('hidden');
+      restartQuiz();
+    }
+
+    function restartQuiz() {
+      const raw = document.getElementById('countInput') ? document.getElementById('countInput').value.trim() : 'All';
+      let n = QUESTION_BANK.length;
+      if (raw && raw.toLowerCase() !== 'all' && !isNaN(Number(raw))) {
+        n = Math.max(1, Math.min(QUESTION_BANK.length, parseInt(raw, 10)));
+      }
+      active = shuffle(QUESTION_BANK).slice(0, n);
+      idx = 0;
+      answers = {};
+      score = 0;
+      answered = new Set();
+      render();
+    }
+
+    function currentQ() { return active[idx]; }
+
+    function styleText(q) {
+      if (q.type === 'mcq') return 'Choose ONE answer.';
+      if (q.type === 'check') return 'Check ALL that apply.';
+      return 'Fill in the blank.';
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function render() {
+      const q = currentQ();
+      document.getElementById('progress').textContent = `Question ${idx + 1} / ${active.length} · Score ${score} / ${answered.size}`;
+      document.getElementById('sectionLabel').textContent = q.hw;
+      document.getElementById('styleLabel').textContent = styleText(q);
+      document.getElementById('questionBox').innerHTML = escapeHtml(q.q);
+      const box = document.getElementById('optionsBox');
+      const fb = document.getElementById('feedback');
+      fb.innerHTML = '';
+      box.innerHTML = '';
+
+      if (q.type === 'mcq') {
+        q.choices.forEach((choice, i) => {
+          const checked = answers[q.id] === i ? 'checked' : '';
+          box.innerHTML += `<label class="option"><input type="radio" name="mcq" value="${i}" ${checked}> ${escapeHtml(choice)}</label>`;
+        });
+      } else if (q.type === 'check') {
+        const selected = Array.isArray(answers[q.id]) ? answers[q.id] : [];
+        q.boxes.forEach((choice, i) => {
+          const checked = selected.includes(i) ? 'checked' : '';
+          box.innerHTML += `<label class="option"><input type="checkbox" value="${i}" ${checked}> ${escapeHtml(choice)}</label>`;
+        });
+      } else if (q.type === 'fitb') {
+        const val = answers[q.id] || '';
+        box.innerHTML = `<input id="fitbInput" type="text" value="${escapeHtml(val)}" placeholder="Type your answer here">`;
+      }
+
+      document.getElementById('prevBtn').disabled = idx === 0;
+      document.getElementById('nextBtn').disabled = idx === active.length - 1;
+    }
+
+    function collectAnswer() {
+      const q = currentQ();
+      if (q.type === 'mcq') {
+        const picked = document.querySelector('input[name="mcq"]:checked');
+        return picked ? Number(picked.value) : null;
+      }
+      if (q.type === 'check') {
+        return Array.from(document.querySelectorAll('#optionsBox input[type="checkbox"]:checked'))
+          .map(x => Number(x.value))
+          .sort((a, b) => a - b);
+      }
+      return document.getElementById('fitbInput').value.trim();
+    }
+
+    function arraysEqual(a, b) {
+      return Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((v, i) => v === b[i]);
+    }
+
+    function isCorrect(q, ans) {
+      if (q.type === 'mcq') return ans === q.a;
+      if (q.type === 'check') return arraysEqual(ans, q.correct.slice().sort((a, b) => a - b));
+      const guess = String(ans || '');
+      return q.accept.some(acc => q.ci ? guess.toLowerCase() === String(acc).toLowerCase() : guess === String(acc));
+    }
+
+    function submitAnswer() {
+      const q = currentQ();
+      const ans = collectAnswer();
+      answers[q.id] = ans;
+      const correct = isCorrect(q, ans);
+      const firstTime = !answered.has(q.id);
+      if (firstTime) {
+        answered.add(q.id);
+        if (correct) score += 1;
+      }
+      const fb = document.getElementById('feedback');
+      let correctText = '';
+      if (q.type === 'mcq') correctText = q.choices[q.a];
+      else if (q.type === 'check') correctText = q.correct.map(i => q.boxes[i]).join('; ');
+      else correctText = q.accept[0];
+      fb.innerHTML = `
+        <div class="${correct ? 'good' : 'bad'}" style="margin-top:16px;font-weight:bold;">
+          ${correct ? 'Correct.' : 'Incorrect.'}
+        </div>
+        <div class="exp"><b>Answer:</b> ${escapeHtml(correctText)}<br><br><b>Explanation:</b> ${escapeHtml(q.exp || '')}</div>
+      `;
+      document.getElementById('progress').textContent = `Question ${idx + 1} / ${active.length} · Score ${score} / ${answered.size}`;
+    }
+
+    function nextQ() {
+      if (idx < active.length - 1) { idx++; render(); }
+    }
+
+    function prevQ() {
+      if (idx > 0) { idx--; render(); }
+    }
+
+    function finishQuiz() {
+      alert(`Final score: ${score} / ${answered.size} answered.`);
+    }
+  </script>
+</body>
+</html>
